@@ -1,0 +1,338 @@
+<body> 
+    <head><link rel="stylesheet" href="styles.css"></head>
+    <div id="root"><div id="shit"></div></div>
+    <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+    <script type="text/babel">
+    class App extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+            step: 1,
+            q_yet: 0,
+            quoteIndex: 1,
+            adjQ: '',
+            metaphor: '',
+            comparison: '',
+            values: [''],
+            userSen1: '',
+            userSen2: '',
+            userSen3: '',
+            userSen4: '',
+            cookieGuess1: [0,],
+            cookieList1: [''],
+            prompt: '',
+            prompts: [
+                "Write a sentence in which the way a character performs some action that makes it clear their experiencing that emotion:",
+                "Write a sentence describing the detail of set, the set dressing, or the atmosphere that conveys that emotion:",
+                "replace this question"
+            ],
+            questions: [
+                {
+                id: 1,
+                label: 'Press any key to start...'
+                },
+                {
+                id: 2,
+                label: '',
+                },
+                {
+                id: 3,
+                label: 'Are you writing for a protagonist, antagonist, love interest, or secondary character?',
+                },
+                {
+                id: 4,
+                label: 'Now, finish the sentence below with a verb phrase at least three words long using the present participle(-ing) form  of any verb except being:',
+                },
+                {
+                id: 5,
+                label: 'Continue your sentence by adding "because" to your sentence:'
+                },
+                {
+                id: 6,
+                label: ''
+                },
+                {
+                id: 7,
+                label: 'continue your last sentence by adding "because" to your sentence:'
+                },
+                {
+                id: 8,
+                label: 'Which one of your characters values or personality traits is illustrated by this sentence?'
+                },
+                {
+                id: 9,
+                label: "Whats the main emotion of your scene? If you don't know, what is the main emotion of the last sentence? "
+                },
+                {
+                id: 10,
+                label: "Without directly naming the emotion or using synonyms, describe how it physically feels:"
+                },
+                {
+                id: 11,
+                label: ""
+                },
+                {
+                id: 12,
+                label: "Think about the relationship in the following metaphor being described, and explain the metaphor in different words:"
+                },
+                {
+                id: 13,
+                label: "Now rewrite your metaphor as a simile:"
+                },
+                {
+                id: 14,
+                label: "Rewrite your simile using a new comparison:"
+                },
+                {
+                id: 15,
+                label: ""
+                }
+            ]};
+        }
+        //Add home button top right using img="tags" link = "amuseboot.com"
+        componentWillMount(){
+            this.randPrompt()
+            this.cookieJar1()
+            this.adjExercise()
+            this.metaphorFind()
+            this.comparisonFind()
+        }
+
+        cookieJar1 = () =>{
+            fetch('./cookieJar1.txt')
+                .then(response => response.text())
+                .then(date => {
+                    let i = 0;
+                    while(i<5){
+                        const randomGuess=Math.floor(Math.random()*54);
+                        while(this.state.cookieGuess1.includes(randomGuess)){
+                            const randomGuess=Math.floor(Math.random()*54);
+                        }
+                        this.state.cookieGuess1.push(randomGuess)
+                        const dataSplit=date.split("<split>");
+                        this.state.cookieList1.push(dataSplit[randomGuess])
+                        i=i+1
+                    }
+                });
+        }
+
+        randPrompt = () => {
+            this.state.prompt=this.state.prompts[Math.floor(Math.random()*3)]
+        }
+
+        adjExercise = () => {
+            fetch('./q.txt')
+                .then(response => response.text())
+                .then(data => {
+                const randInt = Math.floor(Math.random()*25);
+                const adj1=data.split(".")[randInt];
+                this.state.adjQ=`Use five adjectives to describe: ${adj1}`
+                });
+        }
+
+        metaphorFind = () => {
+            const metaphors = [
+                "Reading is a means of thinking with another person’s mind; it forces you to stretch your own.",
+                "It is good to rub and polish our brain against that of another.",
+                "Wear your learning like your watch, in a private pocket; do not pull it out and strike it merely to show you have one.", 
+                "Words are the physicians of a mind diseased.",
+                "Such as are your habitual thoughts, such also will be the character of your mind; for the soul is dyed by the color of the thoughts.",
+                "Words are, of course, the most powerful drug used by mankind.",
+                "Men heap together the mistakes of their lives, and create a monster they call Destiny. JOHN OLIVER HOBBES",
+                "Mrs Campbell is an aged British battleship sinking rapidly and firing every available gun on her rescuers.",
+                "Barbara was a hyena in syrup.",
+                "He looked as though he’d been weaned on a pickle.",
+                "His ears made him look like a taxi cab with both doors open.",
+                "He was a one-man slum.",
+                "She is a shiver looking for a spine to run up.",
+                "He occasionally stumbled over the truth, but would hastily pick himself up and hurry on as if nothing had happened.", 
+                '"A man is not necessarily intelligent because he has plenty of ideas, any more than he is a good general because he has plenty of soldiers." NICOLAS CHAMFORT',
+                '"The desire for success lubricates secret prostitutions in the soul." NORMAN MAILER',
+                '"If you’re black, you got to look at America a little bit different. You got to look at America like the uncle who paid for you to go to college, but who molested you." CHRIS ROCK',
+                'Balzac also wrote, “Love may be the fairest gem which Society has filched from Nature.”',
+                '"Love doesn’t just sit there, like a stone, it has to be made, like bread; remade all the time, made new." URSULA K. LE GUIN',
+                '"Anger is the fluid that love bleeds when you cut it." C. S. LEWIS',
+                '“Art washes away from the soul the dust of everyday life.” –Pablo Picasso',
+                '“All the world’s a stage, and all the men and women merely players.” –William Shakespeare',
+                "A committee is a cul-de-sac down which ideas are lured and then quietly strangled.",
+                "I find the great thing in this world is not so much where we stand, as in what direction we are moving. To reach the port of heaven, we must sail sometimes with the wind and sometimes against it— but we must",
+                '"sail, and not drift, nor lie at anchor." OLIVER WENDELL HOLMES, SR',
+                "In the depth of winter, I finally learned that within me there lay an invincible summer."
+            ]
+            this.state.metaphor=metaphors[Math.floor(Math.random()*metaphors.length)]           
+        }
+
+        comparisonFind = () => {
+            const comparisons = [
+            "a mammal",
+            "something from the field of astronomy",
+            "an article of clothing",
+            "something from the Middle Ages",
+            "some kind of weapon",
+            "something from Star Wars/Star Trek the imagined future",
+            "a fictional character",
+            "something you’d buy at the grocery store",
+            "one of your verbs",
+            "a song or other piece of music",
+            "some kind of commerce",
+            "a particular sort of  person",
+            "some kind of intoxicant or intoxication",
+            "something from the ocean",
+            "something that didn’t exist five years ago",
+            "a memory from your childhood",
+            "something mechanical",
+            "something obsolete",
+            "a mythological creature or person",
+            "a part of the human body",
+            "a weather event",
+            "some kind of plant",
+            "something very tiny"
+            ]
+            this.state.comparison = comparisons[Math.floor(Math.random()*comparisons.length)];
+        }
+
+        verbFinding = () => {
+            const ans = document.getElementById("answer3").value;
+            const list1 = [
+                `My ${ans} hates`, 
+                `My ${ans} loves`, 
+                `My ${ans} starts every day by`,
+                `My ${ans} would never be caught`,
+                `When he/she's really blissed out, my ${ans} can be seen`,
+                `Under stress, my ${ans} starts`,
+                `My ${ans} is happiest when`,
+                `My ${ans} dreams of`,
+                `When s/he's exceptionally angry, my ${ans} starts`,
+                `My ${ans} believes love means`,
+                `My ${ans} believes you can never go wrong`,
+                `My ${ans} feels like s/he is always`,
+                `My ${ans} was a child, s/he loved`
+            ];
+            this.state.userSen1 = list1[Math.floor(Math.random()*list1.length)];
+        }
+
+        handleChange = (index, event) => {
+            if(this.state.q_yet==0){
+                this.state.q_yet=this.state.q_yet+1;
+                this.handleNext()
+            }
+            else{
+                event.persist()
+                this.setState(state => {
+                const values = state.values.map((item, j) => {
+                    if (j === index) {
+                    return event.target.value;
+                    } 
+                    else {
+                    return item;
+                    }
+                });
+
+                return {
+                    values,
+                };
+                });
+            }
+        }
+
+        handleNext = (next) => {
+            const aID = `answer${this.state.q_yet}`
+            const pID = `p${this.state.q_yet}`
+            const getElem = document.getElementById(aID)
+            const getP = document.getElementById(pID)
+            if(this.state.q_yet !== 1){
+                const userInp = getElem.value;
+                getP.innerHTML=userInp;
+            }
+            getElem.style.display = "none";
+            this.setState((prev) => ({step: prev.step+1, values: [...prev.values, '']}));
+        }
+
+        handleEnter = (index, event) => {
+            if(event.key === 'Enter' && this.state.step < this.state.questions.length){
+                this.state.q_yet = this.state.q_yet +1
+                if(this.state.q_yet == 3){
+                    this.state.quoteIndex = this.state.quoteIndex+1
+                    this.verbFinding()
+                }
+                else if(this.state.q_yet == 4){
+                    this.state.quoteIndex = this.state.quoteIndex+1
+                    const u_str2 = document.getElementById("answer4").value;
+                    this.state.userSen2 = `${this.state.userSen1} ${u_str2}`
+                }
+                else if(this.state.q_yet == 6){
+                    this.state.quoteIndex = this.state.quoteIndex+1
+                    const u_str3 = document.getElementById("answer5").value;
+                    const u_str2 = document.getElementById("answer4").value;
+                    this.state.userSen3 = `${this.state.userSen1} ${u_str2} because ${u_str3}`
+                }
+                else if(this.state.q_yet == 8){
+                    this.state.quoteIndex = this.state.quoteIndex+1
+                    const u_str4 = document.getElementById("answer6").value;
+                    this.state.userSen4 = `${u_str4} because:`
+                }
+                this.handleNext(index);
+            }
+        }
+
+
+
+
+        render() {
+            const { questions, step, q_yet, adjQ, values, quoteIndex} = this.state;
+            return (
+            <div>
+                <div id="Header">
+                    <img src="logo.png" alt="LogoImg" class="center" />
+                    <h3 class="center">Athletes stretch, musicians run scales, even meals start with an appetizer. Writers expect to just start writing.  There’s no transition. If we aren't ready, we procrastinate.  We need a warm up, a way to ease ourselves into our work, or sneak up on it. Welcome to aMuseBoot.</h3>
+                    <br />
+                    <h4>"Readiness is all" -Shakespeare</h4>
+                </div>
+                {questions.slice(0, step).map((question, index) => (
+                <div key={question.id}>
+                    {question.id == 3 ? <h3>Get Moving<br/></h3>:null}
+                    {question.id == 9 ? <h3>Get Warm<br /></h3>:null}
+                    {question.id == 3  ? <h4>Nice! Here's a cookie!<br/></h4>:null}
+                    {(question.id == 4 || question.id ==9 || question.id == 12)  ? <h4>Great Job! Here's another cookie!<br/></h4>:null}
+                    {(question.id == 3 || question.id == 4 || question.id ==9 || question.id == 12)  ? <h4 class="center">{this.state.cookieList1[quoteIndex]}<br/></h4>:null}
+                    {question.id == 12 ? <h3>Get Brilliant<br /></h3>:null}
+                    {question.id == 12 ? <h4 name="Quote">“But the greatest thing by far is to be a master of metaphor. It is the one thing that cannot be learnt from others; and it is also a sign of genius, since a good metaphor implies an intuitive perception of the similarity in dissimilars.” -Aristotle<br/></h4> : null}
+                    {question.id == 11 ? <span name="userQuote">{this.state.prompt}</span> : null}
+                    {question.id == 2 ? <span>{adjQ}<br/></span>:<span>{question.label}<br /></span>}
+                    {question.id == 4 ? <span name="userQuote">{this.state.userSen1+":"}</span> : null}
+                    {question.id == 5 ? <span name="userQuote">{this.state.userSen2+" because:"}</span> : null}
+                    {question.id == 6 ? <span name="userQuote">{'Now, rewrite your last sentence: "'+this.state.userSen3+'" in a three word sentence your character would agreee with.'}</span> : null}
+                    {question.id == 7 ? <span name="userQuote">{this.state.userSen4}</span> : null}
+                    {question.id == 12 ? <h5 id="meta">{this.state.metaphor}<br/></h5> : null}
+                    {question.id == 14 ? <h5 id="meta">{this.state.comparison}<br/></h5> : null}
+                    {question.id == 15 ? <h1 id="meta"class="center">Congratgulations!<br/></h1> : null}
+                    {question.id == 15 ? <h3 id="meta">Here's one last cookie (:<br/></h3> : <textarea
+                    autoFocus
+                    name={"answer"+question.id}
+                    id={"answer"+question.id}
+                    value={values[index]}
+                    onChange={e => this.handleChange(index, e)} 
+                    onKeyDown={e => this.handleEnter(index, e)}
+                     />}
+                    <p id={"p"+question.id}></p>
+                    {question.id == 15  ? <h4>{this.state.cookieList1[quoteIndex]}<br/></h4>:null}
+                    {question.id == 15  ? <h1 class="center">Get Writing!<br/></h1>:null}
+                    {question.id == 15  ? <h5 class="center">Not feeling ready yet? Play again!<br/></h5>:null}
+                    {question.id == 15 ? <button id="refreshBtn" href="." type="button">Restart</button> : null}
+
+                </div>
+                ))}
+            </div>
+            );
+            
+        }
+    }
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+
+    </script>
+</body>
